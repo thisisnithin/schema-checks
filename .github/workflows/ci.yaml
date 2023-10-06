@@ -22,6 +22,10 @@ jobs:
         run: |
           npm install -g wgc
 
+      - name: Run GitHub
+        run: |
+          node ./github.js
+
       - name: Run subgraph checks
         run: |
           wgc subgraph check employees --schema ./employees.graphqls
