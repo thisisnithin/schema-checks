@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+const { readFileSync } = require("node:fs");
 
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 
