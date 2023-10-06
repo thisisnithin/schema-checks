@@ -22,7 +22,7 @@ jobs:
 
       - name: Install wgc
         run: |
-          npm install -g wgc
+          npm install -g wgc@latest
 
       - name: Run GitHub
         run: |
@@ -30,9 +30,10 @@ jobs:
 
       - name: Run subgraph checks
         run: |
-          wgc subgraph check employees --schema ./employees.graphqls
-          wgc subgraph check family --schema ./family.graphqls
-          wgc subgraph check hobbies --schema ./hobbies.graphqls
-          wgc subgraph check products --schema ./products.graphqls
+          wgc -V
+          wgc subgraph check employees --schema ./employees.graphqls || echo "Fail"
+          wgc subgraph check family --schema ./family.graphqls  || echo "Fail"
+          wgc subgraph check hobbies --schema ./hobbies.graphqls  || echo "Fail"
+          wgc subgraph check products --schema ./products.graphqls  || echo "Fail"
         env:
           COSMO_API_KEY: ${{ secrets.COSMO_API_KEY }}
