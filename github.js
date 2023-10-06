@@ -38,9 +38,12 @@ const getPrNumber = () => {
   return event && event.pull_request ? event.pull_request.number : undefined;
 };
 
-function getCommit() {
+function getLatestPRCommit() {
   try {
-    return execSync('git log -1 --pretty=format:"%H"').toString();
+    const branchName = execSync("git rev-parse --abbrev-ref HEAD")
+      .toString()
+      .trim();
+    return execSync(`git log ${branchName} -1 --pretty=format:"%H"`).toString();
   } catch (error) {
     return undefined;
   }
@@ -57,7 +60,7 @@ function useGitHub() {
   );
 
   return {
-    commit: getCommit(),
+    commit: getLatestPRCommit(),
     build: process.env.GITHUB_RUN_ID,
     isPr,
     branch,
