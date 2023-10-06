@@ -37,6 +37,15 @@ const getPrNumber = () => {
   return event && event.pull_request ? event.pull_request.number : undefined;
 };
 
+const getLatestCommitSHA = () => {
+  try {
+    const commitSHA = execSync("git rev-parse HEAD").toString().trim();
+    return commitSHA;
+  } catch (err) {
+    return;
+  }
+};
+
 function useGitHub() {
   const isPr =
     process.env.GITHUB_EVENT_NAME === "pull_request" ||
@@ -48,7 +57,7 @@ function useGitHub() {
   );
 
   return {
-    commit: process.env.GITHUB_SHA,
+    commit: getLatestCommitSHA(),
     build: process.env.GITHUB_RUN_ID,
     isPr,
     branch,
