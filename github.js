@@ -1,14 +1,18 @@
 const { execSync } = require("child_process");
+const { readFileSync } = require("node:fs");
 
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 
 function getLatestPRCommit() {
   try {
-    return execSync(
-      `git log ${process.env.GITHUB_HEAD_REF} -1 --pretty=format:"%H"`
-    ).toString();
+    const event = process.env.GITHUB_EVENT_PATH
+      ? JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"))
+      : undefined;
+
+    if (event && event.pull_request) {
+      return event.pull_request.head.sha;
+    }
   } catch (error) {
-    console.error(error);
     return undefined;
   }
 }
@@ -24,7 +28,7 @@ function useGitHub() {
     isPr,
     commit,
     build: process.env.GITHUB_RUN_ID,
-    prBranch: process.env.GITHUB_HEAD_REF,
+    branch: process.env.GITHUB_HEAD_REF,
     repository: process.env.GITHUB_REPOSITORY,
     accountId: process.env.GITHUB_REPOSITORY_OWNER_ID,
     repositoryId: process.env.GITHUB_REPOSITORY_ID,
