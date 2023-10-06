@@ -72,5 +72,5 @@ union Hobby = Exercise | Flying | Gaming | Programming | Travelling | Other
 
 type Employee @key(fields: "id") {
   id: Int!
-  hobbies: [Hobby!]!
+  hobbies: [Hobby]!
 }
