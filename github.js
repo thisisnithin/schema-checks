@@ -38,15 +38,36 @@ const getPrNumber = () => {
   return event && event.pull_request ? event.pull_request.number : undefined;
 };
 
-const getLatestCommitSHA = () => {
-  try {
-    const commitSHA = execSync("git rev-parse HEAD").toString().trim();
-    return commitSHA;
-  } catch (err) {
-    console.log(err);
-    return;
-  }
-};
+const splitBy = "<##>";
+const gitLogFormat = [
+  /* full hash */ "%H",
+  /* Author's name */ "%an",
+  /* Author's email */ "%ae",
+].join(splitBy);
+const latestCommitCommand = `git log -1 --pretty=format:"${gitLogFormat}"`;
+
+function getLatestCommitFromGit() {
+  execSync(latestCommitCommand, { cwd: process.cwd() }, (_, stdout) => {
+    if (stdout.includes(splitBy)) {
+      const [hash, authorName, authorEmail] = stdout.split(splitBy);
+      if (hash && authorName) {
+        let author = authorName;
+
+        if (authorEmail) {
+          author += ` <${authorEmail}>`;
+        }
+
+        resolve({
+          hash,
+          author,
+        });
+        return;
+      }
+    }
+
+    resolve(null);
+  });
+}
 
 function useGitHub() {
   const isPr =
@@ -59,7 +80,7 @@ function useGitHub() {
   );
 
   return {
-    commit: getLatestCommitSHA(),
+    commit: getLatestCommitFromGit(),
     build: process.env.GITHUB_RUN_ID,
     isPr,
     branch,
