@@ -43,6 +43,8 @@ function getLatestPRCommit() {
     const branchName = execSync("git rev-parse --abbrev-ref HEAD")
       .toString()
       .trim();
+
+    console.log({ branchName });
     return execSync(`git log ${branchName} -1 --pretty=format:"%H"`).toString();
   } catch (error) {
     return undefined;
