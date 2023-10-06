@@ -1,1 +1,1 @@
-# schema-checks
+# schema-checks-demo
