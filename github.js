@@ -42,6 +42,7 @@ const getLatestCommitSHA = () => {
     const commitSHA = execSync("git rev-parse HEAD").toString().trim();
     return commitSHA;
   } catch (err) {
+    console.log(err);
     return;
   }
 };
