@@ -8,6 +8,7 @@ function getLatestPRCommit() {
       `git log ${process.env.GITHUB_HEAD_REF} -1 --pretty=format:"%H"`
     ).toString();
   } catch (error) {
+    console.error(error);
     return undefined;
   }
 }
