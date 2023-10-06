@@ -62,6 +62,7 @@ function useGitHub() {
   );
 
   return {
+    ref: process.env.GITHUB_HEAD_REF,
     commit: getLatestPRCommit(),
     build: process.env.GITHUB_RUN_ID,
     isPr,
