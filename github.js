@@ -61,6 +61,6 @@ function useGitHub() {
   };
 }
 
-const stuff = useGitHub();
+const { commit, repository, accountId } = useGitHub();
 
-console.log(stuff);
+console.log(typeof commit, typeof repository, typeof accountId);
