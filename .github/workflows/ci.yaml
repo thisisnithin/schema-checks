@@ -1,0 +1,32 @@
+name: Check Subgraph
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-subgraphs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+
+      - name: Install wgc
+        run: |
+          npm install -g wgc
+
+      - name: Run subgraph checks
+        run: |
+          wgc subgraph check employees --schema ./employees.graphqls
+          wgc subgraph check family --schema ./family.graphqls
+          wgc subgraph check hobbies --schema ./hobbies.graphqls
+          wgc subgraph check products --schema ./products.graphqls
+        env:
+          COSMO_API_KEY: ${{ secrets.COSMO_API_KEY }}
