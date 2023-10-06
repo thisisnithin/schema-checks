@@ -1,4 +1,5 @@
 const { readFileSync } = require("node:fs");
+const { execSync } = require("child_process");
 
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 
