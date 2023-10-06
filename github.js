@@ -2,7 +2,7 @@ const { readFileSync } = require("node:fs");
 
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 
-export function parseBranch(branch) {
+function parseBranch(branch) {
   return branch
     ? /^(?:refs\/heads\/)?(?<branch>.+)$/i.exec(branch)?.[1]
     : undefined;
@@ -37,7 +37,7 @@ const getPrNumber = () => {
   return event && event.pull_request ? event.pull_request.number : undefined;
 };
 
-export function useGitHub() {
+function useGitHub() {
   const isPr =
     process.env.GITHUB_EVENT_NAME === "pull_request" ||
     process.env.GITHUB_EVENT_NAME === "pull_request_target";
